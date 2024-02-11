@@ -1,6 +1,1 @@
 Flask
-jsonify
-requests
-urllib3
-re
-webbrowser
