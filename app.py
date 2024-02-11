@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 import requests
 import urllib3
 import re
 import webbrowser
+import jsonify
 
 app = Flask(__name__)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
