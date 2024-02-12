@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, jsonify
+import streamlit as st
 import requests
-
-app = Flask(__name__)
 
 def search_vehicle_by_plate(plate_number):
     url = f"https://www.midas.fr/api/ecrm/vehicles/tires/search/platenumber/{plate_number}?plateLocale=FR"
@@ -13,15 +11,20 @@ def search_vehicle_by_plate(plate_number):
     else:
         return None
 
-@app.route('/')
-def frontend():
-    return render_template('frontend.html')
-
-@app.route('/search')
-def search():
-    plate_number = request.args.get('plateNumber')
-    vehicle_data = search_vehicle_by_plate(plate_number)
-    return jsonify(vehicle_data)
+def main():
+    st.title('Recherche de véhicule par plaque d\'immatriculation')
+    
+    plate_number = st.text_input('Entrez le numéro de plaque d\'immatriculation :')
+    
+    if st.button('Rechercher'):
+        if plate_number:
+            vehicle_data = search_vehicle_by_plate(plate_number)
+            if vehicle_data:
+                st.json(vehicle_data)
+            else:
+                st.error('Aucun résultat trouvé pour cette plaque d\'immatriculation.')
+        else:
+            st.warning('Veuillez entrer un numéro de plaque d\'immatriculation.')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    main()
