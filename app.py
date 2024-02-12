@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 import requests
 
 app = Flask(__name__)
@@ -8,19 +8,20 @@ def search_vehicle_by_plate(plate_number):
     response = requests.get(url)
     
     if response.status_code == 200:
-        return response.json()
+        data = response.json()
+        return data
     else:
-        return {"error": f"Erreur {response.status_code} lors de la requête."}
+        return None
 
-@app.route('/search-vehicle', methods=['GET'])
-def search_vehicle():
-    plate_number = request.args.get('plate_number')
-    if not plate_number:
-        return jsonify({"error": "Numéro de plaque d'immatriculation manquant."}), 400
-    
+@app.route('/')
+def frontend():
+    return render_template('frontend.html')
+
+@app.route('/search')
+def search():
+    plate_number = request.args.get('plateNumber')
     vehicle_data = search_vehicle_by_plate(plate_number)
-    
     return jsonify(vehicle_data)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
