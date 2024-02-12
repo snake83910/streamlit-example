@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche de véhicule par plaque d'immatriculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 250px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recherche de véhicule par plaque d'immatriculation</h1>
+        <form id="searchForm">
+            <label for="plateNumber">Entrez le numéro de plaque d'immatriculation :</label><br>
+            <input type="text" id="plateNumber" name="plateNumber"><br>
+            <input type="submit" value="Rechercher">
+        </form>
+        <div id="vehicleData"></div>
+    </div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let plateNumber = document.getElementById('plateNumber').value;
+            fetchVehicleData(plateNumber);
+        });
+
+        function fetchVehicleData(plateNumber) {
+            fetch(`/search?plateNumber=${plateNumber}`)
+            .then(response => response.json())
+            .then(data => {
+                displayVehicleData(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function displayVehicleData(data) {
+            let vehicleDataElement = document.getElementById('vehicleData');
+            vehicleDataElement.innerHTML = '';
+            if (data) {
+                let vehicleDataList = document.createElement('ul');
+                for (let key in data) {
+                    let listItem = document.createElement('li');
+                    listItem.textContent = `${key}: ${data[key]}`;
+                    vehicleDataList.appendChild(listItem);
+                }
+                vehicleDataElement.appendChild(vehicleDataList);
+            } else {
+                vehicleDataElement.textContent = 'Aucune donnée de véhicule trouvée.';
+            }
+        }
+    </script>
+</body>
+</html>
