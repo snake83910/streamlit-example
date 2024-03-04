@@ -18,7 +18,7 @@ def search_vehicle_by_plate(plate_number):
 
 def validate_plate_number(plate_number):
     # Expression régulière pour les numéros de plaque d'immatriculation français
-    pattern = r"^[A-Z]{2}-\d{3}-[A-Z]{2}$"
+    pattern = r"^[A-Z]{2}\d{3}[A-Z]{2}$"
     return re.match(pattern, plate_number)
 
 def main():
@@ -30,7 +30,7 @@ def main():
         if not plate_number:
             st.warning("Veuillez entrer un numéro de plaque d'immatriculation.")
         elif not validate_plate_number(plate_number):
-            st.error("Format de plaque incorrect. Veuillez saisir une plaque au format XX-000-XX.")
+            st.error("Format de plaque incorrect. Veuillez saisir une plaque au format AA306VV.")
         else:
             vehicle_data = search_vehicle_by_plate(plate_number)
             if vehicle_data:
